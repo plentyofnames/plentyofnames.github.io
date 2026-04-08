@@ -99,6 +99,7 @@ body { display: flex; flex-direction: column; min-height: 100vh; }
   width: 368px;
 }
 .tile-cover {
+  position: relative;
   width: 368px;
   height: 368px;
   background: #ddd url("plock.png") center / cover no-repeat;
@@ -109,6 +110,16 @@ body { display: flex; flex-direction: column; min-height: 100vh; }
   font-size: 0.9rem;
   margin-bottom: 10px;
 }
+.tile-cover::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: #000;
+  opacity: 0.25;
+  transition: opacity 0.2s;
+  pointer-events: none;
+}
+.tile:hover .tile-cover::after { opacity: 0.1; }
 .tile-title {
   display: block;
   color: #2DBAE1;
