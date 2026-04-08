@@ -12,7 +12,7 @@
   body { display: flex; flex-direction: column; min-height: 100vh; }
 
   .banner {
-    # background: #1a1a1a;
+    position: relative;
     background: #000000;
     text-align: center;
     border-bottom: 3px solid #629aa9;
@@ -24,6 +24,14 @@
     max-height: 320px;
     object-fit: contain;
     margin: 0 auto;
+  }
+  .banner::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: #ffffff;
+    opacity: 0.07;
+    pointer-events: none;
   }
 
   .tabs {
