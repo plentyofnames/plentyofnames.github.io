@@ -48,31 +48,63 @@
       plock: 'https://plentyofnames.github.io/plock/plock.html'
     };
 
+    const tabTargets = { music: 'music', software: 'shows' };
+
     const resetSoftwareView = () => {
       softwarePage.dataset.view = 'grid';
       softwareFrame.src = 'about:blank';
       document.body.dataset.softwareView = 'grid';
     };
 
+    const activateTab = (sectionId) => {
+      tabs.forEach(t => t.classList.toggle('active', t.dataset.target === sectionId));
+      contents.forEach(c => c.classList.toggle('active', c.id === sectionId));
+    };
+
+    const openProject = (project) => {
+      const url = projectUrls[project];
+      if (!url) return;
+      softwareFrame.src = url;
+      softwarePage.dataset.view = 'frame';
+      document.body.dataset.softwareView = 'frame';
+    };
+
+    const navigateFromHash = () => {
+      const hash = location.hash.replace('#', '');
+      const parts = hash.split('/');
+      const page = parts[0] || 'music';
+      const project = parts[1];
+
+      resetSoftwareView();
+      const sectionId = tabTargets[page] || 'music';
+      activateTab(sectionId);
+
+      if (page === 'software' && project && projectUrls[project]) {
+        openProject(project);
+      }
+    };
+
     tabs.forEach(tab => {
       tab.addEventListener('click', () => {
         const target = tab.dataset.target;
         resetSoftwareView();
-        tabs.forEach(t => t.classList.toggle('active', t === tab));
-        contents.forEach(c => c.classList.toggle('active', c.id === target));
+        activateTab(target);
+        const hashName = target === 'shows' ? 'software' : 'music';
+        location.hash = hashName;
       });
     });
 
     document.querySelectorAll('.tile[data-project]').forEach(tile => {
       tile.addEventListener('click', (e) => {
         e.preventDefault();
-        const url = projectUrls[tile.dataset.project];
-        if (!url) return;
-        softwareFrame.src = url;
-        softwarePage.dataset.view = 'frame';
-        document.body.dataset.softwareView = 'frame';
+        const project = tile.dataset.project;
+        openProject(project);
+        location.hash = 'software/' + project;
       });
     });
+
+    window.addEventListener('hashchange', navigateFromHash);
+    navigateFromHash();
   </script>
 </body>
 </html>
