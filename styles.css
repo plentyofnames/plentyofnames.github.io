@@ -44,14 +44,14 @@ body { display: flex; flex-direction: column; min-height: 100vh; }
   gap: 12px;
 }
 .social-links a {
-  color: #aaa;
+  color: #dd8022;
   transition: color 0.2s;
   display: flex;
 }
 .social-links a:hover { color: #fff; }
 .social-links svg {
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
 }
 .tab {
   flex: 0 0 auto;
