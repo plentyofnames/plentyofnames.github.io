@@ -29,10 +29,29 @@ body { display: flex; flex-direction: column; min-height: 100vh; }
 }
 
 .tabs {
+  position: relative;
   display: flex;
   justify-content: center;
   background: #222;
   border-bottom: 1px solid #333;
+}
+.social-links {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  gap: 12px;
+}
+.social-links a {
+  color: #aaa;
+  transition: color 0.2s;
+  display: flex;
+}
+.social-links a:hover { color: #fff; }
+.social-links svg {
+  width: 20px;
+  height: 20px;
 }
 .tab {
   flex: 0 0 auto;
