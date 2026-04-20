@@ -31,10 +31,18 @@
   <section id="music" class="tab-content active">
     <div class="album-embeds">
       <div class="album-card">
+        <a class="bandcamp-placeholder" href="https://plentyofnames.bandcamp.com" target="_blank" rel="noopener" aria-label="Listen on Bandcamp">
+          <svg viewBox="0 0 48 48" fill="currentColor"><path d="M0 34.125l14.025-20.25H48L33.975 34.125z"/></svg>
+          <span>bandcamp</span>
+        </a>
         <iframe data-src="https://bandcamp.com/EmbeddedPlayer/album=704217594/size=large/bgcol=1a1a1a/linkcol=2DBAE1/tracklist=true/transparent=true/" title="Magic People Mover EP"></iframe>
         <a class="vinyl-link" href="https://www.discogs.com/release/36471667-Thronvio-Magic-People-Mover-EP" target="_blank" rel="noopener">Also available on vinyl</a>
       </div>
       <div class="album-card">
+        <a class="bandcamp-placeholder" href="https://plentyofnames.bandcamp.com" target="_blank" rel="noopener" aria-label="Listen on Bandcamp">
+          <svg viewBox="0 0 48 48" fill="currentColor"><path d="M0 34.125l14.025-20.25H48L33.975 34.125z"/></svg>
+          <span>bandcamp</span>
+        </a>
         <iframe data-src="https://bandcamp.com/EmbeddedPlayer/album=3722911460/size=large/bgcol=1a1a1a/linkcol=2DBAE1/tracklist=true/transparent=true/" title="Continuum Mechanics EP"></iframe>
         <a class="vinyl-link" href="https://www.discogs.com/release/34166653-Giorgio-Spinetti-Continuum-Mechanics-EP" target="_blank" rel="noopener">Also available on vinyl</a>
       </div>
@@ -57,6 +65,16 @@
       <iframe class="software-frame" title="Software"></iframe>
     </div>
   </section>
+
+  <div class="consent-backdrop" id="consent-banner">
+    <div class="consent-banner">
+      <p>Diese Website bindet Inhalte von Bandcamp ein. Weitere Informationen in unserer <a href="#datenschutz" class="legal-link" data-legal="datenschutz.html">Datenschutzerklärung</a>.</p>
+      <div class="consent-actions">
+        <button id="consent-accept">Akzeptieren</button>
+        <button id="consent-decline">Ablehnen</button>
+      </div>
+    </div>
+  </div>
 
   <div class="legal-overlay" id="legal-overlay">
     <iframe class="legal-frame" id="legal-frame" title="Legal"></iframe>
@@ -100,12 +118,35 @@
       document.body.dataset.softwareView = 'grid';
     };
 
+    const consentBanner = document.getElementById('consent-banner');
+    const CONSENT_KEY = 'bandcamp-consent';
+
     const loadMusicEmbeds = () => {
+      if (localStorage.getItem(CONSENT_KEY) !== 'accepted') return;
       document.querySelectorAll('#music iframe[data-src]').forEach(iframe => {
         iframe.src = iframe.dataset.src;
         iframe.removeAttribute('data-src');
       });
     };
+
+    const showConsentBanner = () => consentBanner.classList.add('active');
+    const hideConsentBanner = () => consentBanner.classList.remove('active');
+
+    const initConsent = () => {
+      const consent = localStorage.getItem(CONSENT_KEY);
+      if (consent === null) showConsentBanner();
+    };
+
+    document.getElementById('consent-accept').addEventListener('click', () => {
+      localStorage.setItem(CONSENT_KEY, 'accepted');
+      hideConsentBanner();
+      loadMusicEmbeds();
+    });
+
+    document.getElementById('consent-decline').addEventListener('click', () => {
+      localStorage.setItem(CONSENT_KEY, 'declined');
+      hideConsentBanner();
+    });
 
     const activateTab = (sectionId) => {
       tabs.forEach(t => t.classList.toggle('active', t.dataset.target === sectionId));
@@ -182,6 +223,8 @@
 
     window.addEventListener('hashchange', navigateFromHash);
     navigateFromHash();
+    window.scrollTo(0, 0);
+    initConsent();
   </script>
 </body>
 </html>
